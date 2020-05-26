@@ -61,7 +61,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked true.
+                debugPrint('Pressed True');
               },
             ),
           ),
@@ -79,7 +79,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked false.
+                debugPrint('Pressed False');
               },
             ),
           ),
