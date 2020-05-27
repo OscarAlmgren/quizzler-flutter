@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizzler/quiz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 QuizBrain quizBrain = QuizBrain();
 
@@ -28,14 +29,17 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  int _questionsIndex = 0;
-
   List<Icon> scoreKeeper = [];
 
   void updateScoreKeeper(bool answer) {
-    setState(() {
-      if (_questionsIndex < quizBrain.questions.length) {
-        if (answer == quizBrain.getQuestionsAnswer(_questionsIndex)) {
+    if (quizBrain.isFinished()) {
+      // _onBasicAlertPressed(context);
+      Alert(context: context, title: 'Finished!', desc: 'No more questions, resetting quiz.').show();
+      scoreKeeper = [];
+      quizBrain.reset();
+    } else {
+      setState(() {
+        if (answer == quizBrain.getQuestionsAnswer()) {
           scoreKeeper.add(
             Icon(
               Icons.check,
@@ -50,10 +54,11 @@ class _QuizPageState extends State<QuizPage> {
             ),
           );
         }
-        _questionsIndex++;
-      }
-    });
-    debugPrint('i: $_questionsIndex a: $answer');
+        quizBrain.nextQuestion();
+      });
+    }
+
+    //
   }
 
   @override
@@ -68,7 +73,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                quizBrain.getQuestionText(_questionsIndex),
+                quizBrain.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
