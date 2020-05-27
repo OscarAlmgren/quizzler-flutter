@@ -35,8 +35,11 @@ class _QuizPageState extends State<QuizPage> {
     if (quizBrain.isFinished()) {
       // _onBasicAlertPressed(context);
       Alert(context: context, title: 'Finished!', desc: 'No more questions, resetting quiz.').show();
-      scoreKeeper = [];
-      quizBrain.reset();
+      setState(() {
+        scoreKeeper = [];
+        quizBrain.reset();
+      });
+
     } else {
       setState(() {
         if (answer == quizBrain.getQuestionsAnswer()) {
