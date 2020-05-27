@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quizzler/quiz_brain.dart';
+
+QuizBrain quizBrain = QuizBrain();
 
 void main() => runApp(Quizzler());
 
@@ -25,26 +28,32 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  int _questionsIndex = 0;
+
   List<Icon> scoreKeeper = [];
 
   void updateScoreKeeper(bool answer) {
     setState(() {
-      if (answer) {
-        scoreKeeper.add(
-          Icon(
-            Icons.check,
-            color: Colors.green,
-          ),
-        );
-      } else {
-        scoreKeeper.add(
-          Icon(
-            Icons.close,
-            color: Colors.red,
-          ),
-        );
+      if (_questionsIndex < quizBrain.questions.length) {
+        if (answer == quizBrain.getQuestionsAnswer(_questionsIndex)) {
+          scoreKeeper.add(
+            Icon(
+              Icons.check,
+              color: Colors.green,
+            ),
+          );
+        } else {
+          scoreKeeper.add(
+            Icon(
+              Icons.close,
+              color: Colors.red,
+            ),
+          );
+        }
+        _questionsIndex++;
       }
     });
+    debugPrint('i: $_questionsIndex a: $answer');
   }
 
   @override
@@ -59,7 +68,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                quizBrain.getQuestionText(_questionsIndex),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
